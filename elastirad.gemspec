@@ -1,6 +1,11 @@
+lib = 'elastirad'
+lib_file = File.expand_path("../lib/#{lib}.rb", __FILE__)
+File.read(lib_file) =~ /\bVERSION\s*=\s*["'](.+?)["']/
+version = $1
+
 Gem::Specification.new do |s|
   s.name        = 'elastirad'
-  s.version     = '0.0.3'
+  s.version     = version
   s.date        = '2014-03-15'
   s.summary     = 'Elastirad - a RAD Elasticsearch client supporting minimal reading of documentation'
   s.description = 'A RAD (Rapid Application Development) Elasticsearch client'
