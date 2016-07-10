@@ -8,7 +8,6 @@ module  Elastirad
     attr_accessor :sIndex
 
     def initialize(dOptions={})
-      iPort      = iPort.to_i if iPort.is_a?(String)
       @sProtocol = dOptions.has_key?(:protocol) && dOptions[:protocol] \
                  ? dOptions[:protocol]    : 'http'
       @sHostname = dOptions.has_key?(:hostname) && dOptions[:hostname] \
@@ -19,7 +18,7 @@ module  Elastirad
                  ? dOptions[:index].strip : nil
       @sUrl      = makeUrl(@sProtocol,@sHostname,@iPort)
       @oFaraday  = Faraday::Connection.new url: @sUrl || 'http://localhost:9200'
-      @dVerbs    = {:put=>1,:get=>1,:post=>1,:delete=>1}
+      @dVerbs    = {put:1, get:1, post:1, delete:1}
     end
 
     def rad_index(dEsRes={})
