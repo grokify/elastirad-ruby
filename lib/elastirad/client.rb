@@ -29,10 +29,10 @@ module  Elastirad
 
     def rad_request(dEsReq={})
       oEsRes = self.perform_request \
-        getVerbFromEsReq(dEsReq),
-        getPathFromEsReq(dEsReq),
+        get_verb_for_es_req(dEsReq),
+        get_path_for_es_req(dEsReq),
         nil,
-        getBodyFromEsReq(dEsReq)
+        get_body_for_es_req(dEsReq)
 
       dEsResBody = oEsRes.body \
         ? MultiJson.decode( oEsRes.body, :symbolize_keys => true ) : nil
@@ -99,7 +99,7 @@ module  Elastirad
       return sBaseUrl
     end
 
-    def getVerbFromEsReq(dEsReq={})
+    def get_verb_for_es_req(dEsReq={})
       sVerb = dEsReq.has_key?(:verb) ? dEsReq[:verb] : :get
       yVerb = sVerb.downcase.to_sym
       unless @dVerbs.has_key?( yVerb )
@@ -108,7 +108,7 @@ module  Elastirad
       return yVerb
     end
 
-    def getPathFromEsReq(dEsReq={})
+    def get_path_for_es_req(dEsReq={})
       aPath     = []
       bHasIndex = false
 
@@ -139,17 +139,17 @@ module  Elastirad
       return sPath
     end
 
-    def getBodyFromEsReq(dEsReq={})
-      jBody = nil
+    def get_body_for_es_req(dEsReq={})
+      json = nil
       if dEsReq.has_key?(:body)
         if dEsReq[:body].is_a?(Hash)
-          jBody = MultiJson.encode(dEsReq[:body])
+          json = MultiJson.encode(dEsReq[:body])
         elsif dEsReq[:body].is_a?(String) && dEsReq[:body].length > 0
-          jBody = dEsReq[:body]
+          json = dEsReq[:body]
         end
-        jBody = nil if jBody == '{}' || jBody.length < 1
+        json = nil if json == '{}' || json.length < 1
       end
-      return jBody
+      return json
     end
 
   end
