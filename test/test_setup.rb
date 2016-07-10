@@ -1,5 +1,4 @@
-require 'test/unit'
-require 'elastirad'
+require './test/test_base.rb'
 
 class ElastiradTest < Test::Unit::TestCase
   def testSetup
