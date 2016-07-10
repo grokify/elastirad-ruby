@@ -7,15 +7,15 @@ module  Elastirad
     include Elasticsearch::API
     attr_accessor :sIndex
 
-    def initialize(dOptions={})
-      @sProtocol = dOptions.has_key?(:protocol) && dOptions[:protocol] \
-                 ? dOptions[:protocol] : 'http'
-      @sHostname = dOptions.has_key?(:hostname) && dOptions[:hostname] \
-                 ? dOptions[:hostname] : 'localhost'
-      @iPort     = dOptions.has_key?(:port) && dOptions[:port] \
-                 ? dOptions[:port].to_i : 9200
-      @sIndex    = dOptions.has_key?(:index) && dOptions[:index] \
-                 ? dOptions[:index].strip : nil
+    def initialize(opts={})
+      @sProtocol = opts.has_key?(:protocol) && opts[:protocol] \
+                 ? opts[:protocol] : 'http'
+      @sHostname = opts.has_key?(:hostname) && opts[:hostname] \
+                 ? opts[:hostname] : 'localhost'
+      @iPort     = opts.has_key?(:port) && opts[:port] \
+                 ? opts[:port].to_i : 9200
+      @sIndex    = opts.has_key?(:index) && opts[:index] \
+                 ? opts[:index].strip : nil
       @sUrl      = make_url @sProtocol, @sHostname, @iPort
       @oFaraday  = Faraday::Connection.new url: @sUrl || 'http://localhost:9200'
       @dVerbs    = {put:1, get:1, post:1, delete:1}
