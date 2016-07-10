@@ -1,6 +1,16 @@
 Elastirad: A RAD Client for Elasticsearch
 =========================================
 
+[![Gem Version][gem-version-svg]][gem-version-link]
+[![Build Status][build-status-svg]][build-status-link]
+[![Coverage Status][coverage-status-svg]][coverage-status-link]
+[![Dependency Status][dependency-status-svg]][dependency-status-link]
+[![Code Climate][codeclimate-status-svg]][codeclimate-status-link]
+[![Scrutinizer Code Quality][scrutinizer-status-svg]][scrutinizer-status-link]
+[![Downloads][downloads-svg]][downloads-link]
+[![Docs][docs-rubydoc-svg]][docs-rubydoc-link]
+[![License][license-svg]][license-link]
+
 ## Synopsis
 
 Elastirad is a custom Rapid Application Development (RAD) client for
@@ -129,3 +139,22 @@ Elasticsearch::API for Ruby
 Elastirad is available under an MIT-style license. See [LICENSE.txt](LICENSE.txt) for details.
 
 Elastirad &copy; 2014-2016 by John Wang
+
+ [gem-version-svg]: https://badge.fury.io/rb/elastirad.svg
+ [gem-version-link]: http://badge.fury.io/rb/elastirad
+ [downloads-svg]: http://ruby-gem-downloads-badge.herokuapp.com/elastirad
+ [downloads-link]: https://rubygems.org/gems/elastirad
+ [build-status-svg]: https://api.travis-ci.org/grokify/elastirad-ruby.svg?branch=master
+ [build-status-link]: https://travis-ci.org/grokify/elastirad-ruby
+ [coverage-status-svg]: https://coveralls.io/repos/grokify/elastirad-ruby/badge.svg?branch=master
+ [coverage-status-link]: https://coveralls.io/r/grokify/elastirad-ruby?branch=master
+ [dependency-status-svg]: https://gemnasium.com/grokify/elastirad-ruby.svg
+ [dependency-status-link]: https://gemnasium.com/grokify/elastirad-ruby
+ [codeclimate-status-svg]: https://codeclimate.com/github/grokify/elastirad-ruby/badges/gpa.svg
+ [codeclimate-status-link]: https://codeclimate.com/github/grokify/elastirad-ruby
+ [scrutinizer-status-svg]: https://scrutinizer-ci.com/g/grokify/elastirad-ruby/badges/quality-score.png?b=master
+ [scrutinizer-status-link]: https://scrutinizer-ci.com/g/grokify/elastirad-ruby/?branch=master
+ [docs-rubydoc-svg]: https://img.shields.io/badge/docs-rubydoc-blue.svg
+ [docs-rubydoc-link]: http://www.rubydoc.info/gems/elastirad/
+ [license-svg]: https://img.shields.io/badge/license-MIT-blue.svg
+ [license-link]: https://github.com/grokify/elastirad-ruby/blob/master/LICENSE
