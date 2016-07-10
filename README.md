@@ -1,105 +1,106 @@
 Elastirad: A RAD Client for Elasticsearch
-====================================================
+=========================================
 
-Synopsis
---------
+## Synopsis
 
 Elastirad is a custom Rapid Application Development (RAD) client for
-Elasticsearch's Elasticsearch::API that provides a simple interface for
+Elasticsearch's `Elasticsearch::API` that provides a simple interface for
 making Elasticsearch requests based on Elasticsearch's online documentation.
 
 The primary goal for Elastirad is to enable use of the Elasticsearch online
 curl-based documentation alone without needing to understand the syntax for
 the Ruby SDK.
 
-Elastirad::Client embeds the Elasticsearch::API and thus supports
-Elasticsearch::API methods.
+`Elastirad::Client` embeds the `Elasticsearch::API` and thus supports
+`Elasticsearch::API` methods.
 
-Installing
-----------
+## Installation
 
 Download and install elastirad with the following:
 
-    gem install elastirad
+```
+$ gem install elastirad
+```
 
-#Examples
----------
+## Usage
 
-    require 'elastirad'
+```ruby
+require 'elastirad'
 
-    # Defaults to http://localhost:9200
+# Defaults to http://localhost:9200
 
-    rad = Elastirad::Client.new
+rad = Elastirad::Client.new
 
-    # All of the following arguments are optional
-    # Setting :index will enable request code to not include the index
-    # for greater flexibility when switching between deployments, e.g.
-    # dev, staging, production, etc.
+# All of the following arguments are optional
+# Setting :index will enable request code to not include the index
+# for greater flexibility when switching between deployments, e.g.
+# dev, staging, production, etc.
 
-    rad = Elastirad::Client.new( \
-      :protocol => 'https',
-      :hostname => 'localhost',
-      :port     => 9200,
-      :index    => 'articles'
-    )
+rad = Elastirad::Client.new( \
+  protocol: 'https',
+  hostname: 'localhost',
+  port:     9200,
+  index:    'articles'
+)
 
-    # path can be a simple string. Leading slash will over ride default :index
+# path can be a simple string. Leading slash will over ride default :index
 
-    result_hash = rad.rad_request({ :path => '/articles/_count' })
+result_hash = rad.rad_request({ path: '/articles/_count' })
 
-    # path can also be an array
+# path can also be an array
 
-    result_hash = rad.rad_request({ :path => ['/articles/article', 1 ] })
+result_hash = rad.rad_request({ path: ['/articles/article', 1 ] })
 
-    # default index can be used without leading slash
+# default index can be used without leading slash
 
-    result_hash = rad.rad_request({ :path => ['article', 1 ] })
+result_hash = rad.rad_request({ path: ['article', 1 ] })
 
-    # retreive all responses for :get requests only
+# retreive all responses for :get requests only
 
-    result_hash = rad.rad_request_all({ :path => 'article/_search' })
+result_hash = rad.rad_request_all({ path: 'article/_search' })
 
-    # optional :verb can be used for non-GET requests, :get is used by default
+# optional :verb can be used for non-GET requests, :get is used by default
 
-    article = { :title => 'Hello World', :by => 'John Doe' }
+article = { title: 'Hello World', by: 'John Doe' }
 
-    result_hash = rad.rad_request({ \
-      :verb => 'put',
-      :path => ['article', 1 ],
-      :body => article
-    })
+result_hash = rad.rad_request({ \
+  verb: 'put',
+  path: ['article', 1 ],
+  body: article
+})
 
-    # :body can be a hash or JSON string
+# :body can be a hash or JSON string
 
-    result_hash = rad.rad_request({ \
-      :verb => 'put',
-      :path => ['article', 1 ],
-      :body => JSON.dump( article )
-    })
+result_hash = rad.rad_request({ \
+  verb: 'put',
+  path: ['article', 1 ],
+  body: JSON.dump( article )
+})
 
-    # :put verb can automatically be added using #rad_index method
+# :put verb can automatically be added using #rad_index method
 
-    result_has = rad.rad_index({ \
-      :path => ['article', 1 ],
-      :body => article
-    })
+result_has = rad.rad_index({ \
+  path: ['article', 1 ],
+  body: article
+})
 
-    # Supports Elasticsearch::API methods
+# Supports Elasticsearch::API methods
 
-    p rad.cluster.health
-    # --> GET _cluster/health {}
-    # => "{"cluster_name":"elasticsearch" ... }"
+p rad.cluster.health
+# --> GET _cluster/health {}
+# => "{"cluster_name":"elasticsearch" ... }"
+```
 
-#Documentation
---------------
+## Documentation
 
 This gem is 100% documented with YARD, an exceptional documentation library. To see documentation for this, and all the gems installed on your system use:
 
-    $ gem install yard
-    $ yard server -g
+```bash
+$ gem install yard
+$ yard server -g
+```
 
-#Change Log
------------
+## Change Log
 
 - **2014-03-24**: 0.0.3
   - Add Elastirad::Client::rad_request_all() method
@@ -113,25 +114,18 @@ This gem is 100% documented with YARD, an exceptional documentation library. To 
   - Initial release
   - Custom Elasticsearch::API mixin client
 
-#Links
-------
+## Links
 
 Elasticseach Reference Guide
 
-http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/index.html
+* http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/index.html
 
 Elasticsearch::API for Ruby
 
-https://github.com/elasticsearch/elasticsearch-ruby/tree/master/elasticsearch-api
+* https://github.com/elasticsearch/elasticsearch-ruby/tree/master/elasticsearch-api
 
-#Copyright and License
-----------------------
+## License
 
-Elastirad &copy; 2014 by [John Wang](mailto:johncwang@gmail.com).
+Elastirad is available under an MIT-style license. See [LICENSE.txt](LICENSE.txt) for details.
 
-Elastirad is licensed under the MIT license. Please see the LICENSE document for more information.
-
-Warranty
---------
-
-This software is provided "as is" and without any express or implied warranties, including, without limitation, the implied warranties of merchantibility and fitness for a particular purpose.
+Elastirad &copy; 2014-2016 by John Wang
