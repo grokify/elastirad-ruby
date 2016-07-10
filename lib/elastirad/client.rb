@@ -9,35 +9,35 @@ module  Elastirad
 
     def initialize(dOptions={})
       @sProtocol = dOptions.has_key?(:protocol) && dOptions[:protocol] \
-                 ? dOptions[:protocol]    : 'http'
+                 ? dOptions[:protocol] : 'http'
       @sHostname = dOptions.has_key?(:hostname) && dOptions[:hostname] \
-                 ? dOptions[:hostname]    : 'localhost'
+                 ? dOptions[:hostname] : 'localhost'
       @iPort     = dOptions.has_key?(:port) && dOptions[:port] \
-                 ? dOptions[:port].to_i   : 9200
+                 ? dOptions[:port].to_i : 9200
       @sIndex    = dOptions.has_key?(:index) && dOptions[:index] \
                  ? dOptions[:index].strip : nil
-      @sUrl      = makeUrl(@sProtocol,@sHostname,@iPort)
+      @sUrl      = make_url @sProtocol, @sHostname, @iPort
       @oFaraday  = Faraday::Connection.new url: @sUrl || 'http://localhost:9200'
       @dVerbs    = {put:1, get:1, post:1, delete:1}
     end
 
-    def rad_index(dEsRes={})
-      dEsRes[:verb] = :put
-      return self.rad_request(dEsRes)
+    def rad_index(req={})
+      req[:verb] = :put
+      return self.rad_request req
     end
 
-    def rad_request(dEsReq={})
-      oEsRes = self.perform_request \
-        get_verb_for_es_req(dEsReq),
-        get_path_for_es_req(dEsReq),
+    def rad_request(req={})
+      res = self.perform_request \
+        get_verb_for_es_req(req),
+        get_path_for_es_req(req),
         nil,
-        get_body_for_es_req(dEsReq)
+        get_body_for_es_req(req)
 
-      dEsResBody = oEsRes.body \
-        ? MultiJson.decode( oEsRes.body, :symbolize_keys => true ) : nil
+      return res.body \
+        ? MultiJson.decode( res.body, symbolize_keys: true ) : nil
     end
 
-    def perform_request(method,path,params,body)
+    def perform_request(method, path, params, body)
       @oFaraday.run_request \
         method.downcase.to_sym,
         path,
@@ -49,7 +49,7 @@ module  Elastirad
       if dEsReq.has_key?(:body)
         if dEsReq[:body].is_a?(String)
           dEsReqBody = dEsReq[:body] \
-            ? MultiJson.decode( dEsResBody, :symbolize_keys => true ) : {}
+            ? MultiJson.decode( dEsResBody, symbolize_keys: true ) : {}
           dEsReq[:body] = dEsReqBody
         end
       else
@@ -74,7 +74,7 @@ module  Elastirad
 
     private
 
-    def makeUrl(sProtocol='http',sHostname='localhost',iPort=9200)
+    def make_url(sProtocol='http', sHostname='localhost', iPort=9200)
       if sHostname.nil?
         sHostname = 'localhost'
       elsif sHostname.is_a?(String)
@@ -151,5 +151,8 @@ module  Elastirad
       return json
     end
 
+    alias_method :index, :rad_index
+    alias_method :request, :rad_request
+    alias_method :request_all, :rad_request_all
   end
 end
