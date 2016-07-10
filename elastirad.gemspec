@@ -21,4 +21,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'elasticsearch', '~> 1.0', '>= 1.0.1'
   s.add_dependency 'faraday', '~> 0', '>= 0'
   s.add_dependency 'multi_json', '~> 1.10', '>= 1.10.1'
+  s.add_development_dependency 'rake'
+  s.add_development_dependency 'simplecov'
+  s.add_development_dependency 'test-unit'
 end
