@@ -96,6 +96,7 @@ module  Elastirad
       elsif ! port.kind_of?(Integer)
         raise ArgumentError, 'E_PORT_IS_NOT_AN_INTEGER'
       end
+
       url = "#{scheme}://#{hostname}"
       url.sub!(/\/+\s*$/,'')
       url += ":#{port}" if port != 80
@@ -105,35 +106,34 @@ module  Elastirad
     def get_verb_for_es_req(es_req = {})
       verb = es_req.has_key?(:verb) ? es_req[:verb] : :get
       verb = verb.downcase.to_sym
+
       unless @verbs.has_key?( verb )
         raise ArgumentError, 'E_BAD_VERB'
       end
       return verb
     end
 
-    def get_path_for_es_req(dEsReq={})
-      aPath     = []
+    def get_path_for_es_req(es_req = {})
+      parts = []
       has_index = false
 
-      if dEsReq.has_key?(:path)
-        if dEsReq[:path].is_a?(Array)
-          aPath.push(*dEsReq[:path])
-        elsif dEsReq[:path].is_a?(String)
-          aPath.push(dEsReq[:path])
+      if es_req.key?(:path)
+        if es_req[:path].is_a?(Array)
+          parts.push(*es_req[:path])
+        elsif es_req[:path].is_a?(String)
+          parts.push(es_req[:path])
         end
       else
-        if dEsReq.has_key?(:index) && dEsReq[:index].is_a?(String)
-          aPath.push(dEsReq[:index])
+        if es_req.key?(:index)
+          parts.push("#{es_req[:index]}")
           has_index = true
         end
-        if dEsReq.has_key?(:type) && dEsReq[:type].is_a?(String)
-          aPath.push(dEsReq[:type])
-        end
-        if dEsReq.has_key?(:id) && dEsReq[:id].is_a?(String)
-          aPath.push(dEsReq[:id])
-        end
+        parts.push("#{es_req[:type]}") if es_req.key?(:type)
+        parts.push("#{es_req[:id]}") if es_req.key?(:id)
       end
-      path = aPath.join('/').strip.gsub(/\/+/,'/')
+
+      path = parts.join('/').strip.gsub(/\/+/,'/')
+
       if (path.index('/')!=0 || !has_index) && ( @index.is_a?(String) && @index.length>0 )
         path = "#{@index}/#{path}"
       end
@@ -141,16 +141,14 @@ module  Elastirad
     end
 
     def get_body_for_es_req(es_req = {})
-      json = nil
-      if es_req.has_key?(:body)
-        if es_req[:body].is_a?(Hash)
-          json = MultiJson.encode(es_req[:body])
-        elsif es_req[:body].is_a?(String) && es_req[:body].length > 0
-          json = es_req[:body]
-        end
-        json = nil if json == '{}' || json.length < 1
-      end
-      return json
+      return nil unless es_req.key? :body
+
+      json = es_req[:body].is_a?(Hash)    \
+        ? MultiJson.encode(es_req[:body]) \
+        : "#{es_req[:body]}".strip
+
+      return json == '{}' || json.length < 1 \
+        ? nil : json
     end
 
     alias_method :rad_index, :index
