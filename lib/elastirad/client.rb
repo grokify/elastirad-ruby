@@ -21,7 +21,7 @@ module  Elastirad
                 ? opts[:port].to_i : ES_DEFAULT_PORT
       @index    = opts.has_key?(:index) && opts[:index] \
                 ? opts[:index].strip : nil
-      @url      = make_url @scheme, @hostname, @port
+      @url      = build_url
       @http     = Faraday::Connection.new url: @url || ES_DEFAULT_URL
       @verbs    = {put:1, get:1, post:1, delete:1}
     end
@@ -60,47 +60,26 @@ module  Elastirad
         es_req[:body] = {}
       end
       es_req[:body][:from] = 0
-      dEsRes1 = self.rad_request es_req
-      dEsRes  = dEsRes1
+      es_res1 = self.rad_request es_req
+      es_res  = es_res1
       if !es_req.has_key?(:verb) || es_req[:verb] == :get || es_req[:verb].downcase == 'get'
-        if dEsRes1.has_key?(:hits) && dEsRes1[:hits].has_key?(:total)
-          iHitsTotal = dEsRes1[:hits][:total].to_i
-          iHitsSize  = dEsRes1[:hits][:hits].length.to_i
+        if es_res1.has_key?(:hits) && es_res1[:hits].has_key?(:total)
+          iHitsTotal = es_res1[:hits][:total].to_i
+          iHitsSize = es_res1[:hits][:hits].length.to_i
           if iHitsTotal > iHitsSize
             es_req[:body][:size] = iHitsTotal
-            dEsRes2  = self.rad_request es_req
-            dEsRes   = dEsRes2
+            es_res2 = self.rad_request es_req
+            es_res = es_res2
           end
         end
       end
-      return dEsRes
+      return es_res
     end
 
     private
 
-    def make_url(scheme = ES_DEFAULT_SCHEME, hostname = ES_DEFAULT_PORT, port = ES_DEFAULT_PORT)
-      if hostname.nil?
-        hostname = ES_DEFAULT_HOST
-      elsif hostname.is_a? String
-        hostname.strip!
-        if hostname.length < 1
-          hostname = ES_DEFAULT_HOST
-        end
-      else
-        raise ArgumentError, 'E_HOSTNAME_IS_NOT_A_STRING'
-      end
-      if port.nil?
-        port = 9200
-      elsif port.is_a?(String) && port =~ /^[0-9]+$/
-        port = port.to_i
-      elsif ! port.kind_of?(Integer)
-        raise ArgumentError, 'E_PORT_IS_NOT_AN_INTEGER'
-      end
-
-      url = "#{scheme}://#{hostname}"
-      url.sub!(/\/+\s*$/,'')
-      url += ":#{port}" if port != 80
-      return url
+    def build_url
+      "#{@scheme}://#{@hostname}:#{@port}".sub(/\s*\/+\s*$/,'')
     end
 
     def get_verb_for_es_req(es_req = {})
