@@ -80,11 +80,11 @@ module  Elastirad
 
     def make_url(scheme = ES_DEFAULT_SCHEME, hostname = ES_DEFAULT_PORT, port = ES_DEFAULT_PORT)
       if hostname.nil?
-        hostname = 'localhost'
-      elsif hostname.is_a?(String)
+        hostname = ES_DEFAULT_HOST
+      elsif hostname.is_a? String
         hostname.strip!
         if hostname.length < 1
-          hostname = 'localhost'
+          hostname = ES_DEFAULT_HOST
         end
       else
         raise ArgumentError, 'E_HOSTNAME_IS_NOT_A_STRING'
@@ -98,7 +98,7 @@ module  Elastirad
       end
       url = "#{scheme}://#{hostname}"
       url.sub!(/\/+\s*$/,'')
-      url += ':' + port.to_s if port != 80
+      url += ":#{port}" if port != 80
       return url
     end
 
