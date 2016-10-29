@@ -28,10 +28,10 @@ module  Elastirad
 
     def index(req = {})
       req[:verb] = :put
-      self.rad_request req
+      self.request req
     end
 
-    def rad_request(req = {})
+    def request(req = {})
       res = self.perform_request \
         get_verb_for_es_req(req),
         get_path_for_es_req(req),
@@ -91,12 +91,10 @@ module  Elastirad
       parts = []
       has_index = false
 
-      if es_req.key?(:path)
-        if es_req[:path].is_a? Array
-          parts.push *es_req[:path]
-        elsif es_req[:path].is_a? String
-          parts.push es_req[:path]
-        end
+      if es_req.key? :path
+        es_req[:path].is_a?(Array) \
+          ? parts.push(*es_req[:path]) \
+          : parts.push("#{es_req[:path]}")
       else
         if es_req.key? :index
           parts.push "#{es_req[:index]}"
@@ -126,7 +124,7 @@ module  Elastirad
     end
 
     alias_method :rad_index, :index
-    alias_method :request, :rad_request
+    alias_method :rad_request, :request
     alias_method :rad_request_all, :request_all
   end
 end
