@@ -13,13 +13,13 @@ module  Elastirad
     ES_DEFAULT_URL = 'http://localhost:9200'
 
     def initialize(opts={})
-      @scheme   = opts.has_key?(:protocol) && opts[:protocol] \
+      @scheme   = opts.key?(:protocol) && opts[:protocol] \
                 ? opts[:protocol] : ES_DEFAULT_SCHEME
-      @hostname = opts.has_key?(:hostname) && opts[:hostname] \
+      @hostname = opts.key?(:hostname) && opts[:hostname] \
                 ? opts[:hostname] : ES_DEFAULT_HOST
-      @port     = opts.has_key?(:port) && opts[:port] \
+      @port     = opts.key?(:port) && opts[:port] \
                 ? opts[:port].to_i : ES_DEFAULT_PORT
-      @index    = opts.has_key?(:index) && opts[:index] \
+      @index    = opts.key?(:index) && opts[:index] \
                 ? opts[:index].strip : nil
       @url      = build_url
       @http     = Faraday::Connection.new url: @url || ES_DEFAULT_URL
@@ -57,8 +57,8 @@ module  Elastirad
       es_req[:body][:from] = 0
       es_res1 = self.rad_request es_req
       es_res  = es_res1
-      if !es_req.has_key?(:verb) || es_req[:verb] == :get || es_req[:verb].downcase == 'get'
-        if es_res1.has_key?(:hits) && es_res1[:hits].key?(:total)
+      if !es_req.key?(:verb) || es_req[:verb] == :get || es_req[:verb].downcase == 'get'
+        if es_res1.key?(:hits) && es_res1[:hits].key?(:total)
           hits_total = es_res1[:hits][:total].to_i
           hits_this = es_res1[:hits][:hits].length.to_i
           if hits_total > hits_this
@@ -78,7 +78,7 @@ module  Elastirad
     end
 
     def get_verb_for_es_req(es_req = {})
-      verb = es_req.has_key?(:verb) ? es_req[:verb] : :get
+      verb = es_req.key?(:verb) ? es_req[:verb] : :get
       verb = verb.downcase.to_sym
 
       unless @verbs.key?( verb )
