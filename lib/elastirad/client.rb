@@ -49,13 +49,9 @@ module  Elastirad
         {'Content-Type' => 'application/json'}
     end
 
-    def rad_request_all(es_req = {})
-      if es_req.has_key? :body
-        if es_req[:body].is_a? String
-          dEsReqBody = es_req[:body] \
-            ? MultiJson.decode( dEsResBody, symbolize_keys: true ) : {}
-          es_req[:body] = dEsReqBody
-        end
+    def request_all(es_req = {})
+      if es_req.key?(:body) && es_req[:body].is_a?(String)
+        es_req[:body] = MultiJson.decode dEsResBody, symbolize_keys: true
       else
         es_req[:body] = {}
       end
@@ -63,11 +59,11 @@ module  Elastirad
       es_res1 = self.rad_request es_req
       es_res  = es_res1
       if !es_req.has_key?(:verb) || es_req[:verb] == :get || es_req[:verb].downcase == 'get'
-        if es_res1.has_key?(:hits) && es_res1[:hits].has_key?(:total)
-          iHitsTotal = es_res1[:hits][:total].to_i
-          iHitsSize = es_res1[:hits][:hits].length.to_i
-          if iHitsTotal > iHitsSize
-            es_req[:body][:size] = iHitsTotal
+        if es_res1.has_key?(:hits) && es_res1[:hits].key?(:total)
+          hits_total = es_res1[:hits][:total].to_i
+          hits_this = es_res1[:hits][:hits].length.to_i
+          if hits_total > hits_this
+            es_req[:body][:size] = hits_total
             es_res2 = self.rad_request es_req
             es_res = es_res2
           end
@@ -86,7 +82,7 @@ module  Elastirad
       verb = es_req.has_key?(:verb) ? es_req[:verb] : :get
       verb = verb.downcase.to_sym
 
-      unless @verbs.has_key?( verb )
+      unless @verbs.key?( verb )
         raise ArgumentError, 'E_BAD_VERB'
       end
       return verb
@@ -97,14 +93,14 @@ module  Elastirad
       has_index = false
 
       if es_req.key?(:path)
-        if es_req[:path].is_a?(Array)
-          parts.push(*es_req[:path])
-        elsif es_req[:path].is_a?(String)
-          parts.push(es_req[:path])
+        if es_req[:path].is_a? Array
+          parts.push *es_req[:path]
+        elsif es_req[:path].is_a? String
+          parts.push es_req[:path]
         end
       else
-        if es_req.key?(:index)
-          parts.push("#{es_req[:index]}")
+        if es_req.key? :index
+          parts.push "#{es_req[:index]}"
           has_index = true
         end
         parts.push("#{es_req[:type]}") if es_req.key?(:type)
@@ -132,6 +128,6 @@ module  Elastirad
 
     alias_method :rad_index, :index
     alias_method :request, :rad_request
-    alias_method :request_all, :rad_request_all
+    alias_method :rad_request_all, :request_all
   end
 end
