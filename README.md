@@ -2,6 +2,7 @@ Elastirad: A RAD Client for Elasticsearch
 =========================================
 
 [![Gem Version][gem-version-svg]][gem-version-link]
+[![Build Status][build-status-svg]][build-status-link]
 [![Dependency Status][dependency-status-svg]][dependency-status-link]
 [![Code Climate][codeclimate-status-svg]][codeclimate-status-link]
 [![Scrutinizer Code Quality][scrutinizer-status-svg]][scrutinizer-status-link]
@@ -105,17 +106,7 @@ $ yard server -g
 
 ## Change Log
 
-- **2014-03-24**: 0.0.3
-  - Add `Elastirad::Client::rad_request_all()` method
-  - Expose `Elastirad::Client::sIndex` as rw accessor
-- **2014-03-15**: 0.0.2
-  - Add documentation of Elasticsearch::API mixin functionality
-  - Add `CHANGELOG.md` excerpt to `README.md`
-  - Fix bug in #rad_index
-  - Fix bug for YARD README.md formatting
-- **2014-03-14**: 0.0.1
-  - Initial release
-  - Custom `Elasticsearch::API` mixin client
+See [CHANGELOG.md](CHANGELOG.md).
 
 ## Links
 
