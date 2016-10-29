@@ -110,11 +110,11 @@ See [CHANGELOG.md](CHANGELOG.md).
 
 Elasticseach Reference Guide
 
-* http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/index.html
+* https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html
 
 Elasticsearch::API for Ruby
 
-* https://github.com/elasticsearch/elasticsearch-ruby/tree/master/elasticsearch-api
+* https://github.com/elastic/elasticsearch-ruby/tree/master/elasticsearch-api
 
 ## License
 
