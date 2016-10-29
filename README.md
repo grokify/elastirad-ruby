@@ -12,9 +12,7 @@ Elastirad: A RAD Client for Elasticsearch
 
 ## Synopsis
 
-Elastirad is a simple client for Elasticsearch's `Elasticsearch::API` that provides a simple interface for making requests based on Elasticsearch's online REST API documentation.
-
-The primary goal for Elastirad is to enable use of the Elasticsearch online cURL-based documentation without needing to understand the syntax for the [Elasticsearch Ruby SDK](https://github.com/elastic/elasticsearch-ruby).
+Elastirad is a simple client for Elasticsearch's `Elasticsearch::API` that provides a simple interface for making requests based on Elasticsearch's online cURL-based documentation without needing to understand the syntax for the [Elasticsearch Ruby SDK](https://github.com/elastic/elasticsearch-ruby).
 
 `Elastirad::Client` embeds the `Elasticsearch::API` and thus supports `Elasticsearch::API` methods.
 
