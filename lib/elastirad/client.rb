@@ -5,40 +5,44 @@ require 'elasticsearch/api'
 module  Elastirad
   class Client
     include Elasticsearch::API
-    attr_accessor :sIndex
+    attr_accessor :index
+
+    ES_DEFAULT_SCHEME = 'http'
+    ES_DEFAULT_HOST = 'localhost'
+    ES_DEFAULT_PORT = 9200
+    ES_DEFAULT_URL = 'http://localhost:9200'
 
     def initialize(opts={})
-      @sProtocol = opts.has_key?(:protocol) && opts[:protocol] \
-                 ? opts[:protocol] : 'http'
-      @sHostname = opts.has_key?(:hostname) && opts[:hostname] \
-                 ? opts[:hostname] : 'localhost'
-      @iPort     = opts.has_key?(:port) && opts[:port] \
-                 ? opts[:port].to_i : 9200
-      @sIndex    = opts.has_key?(:index) && opts[:index] \
-                 ? opts[:index].strip : nil
-      @sUrl      = make_url @sProtocol, @sHostname, @iPort
-      @oFaraday  = Faraday::Connection.new url: @sUrl || 'http://localhost:9200'
-      @dVerbs    = {put:1, get:1, post:1, delete:1}
+      @scheme   = opts.has_key?(:protocol) && opts[:protocol] \
+                ? opts[:protocol] : ES_DEFAULT_SCHEME
+      @hostname = opts.has_key?(:hostname) && opts[:hostname] \
+                ? opts[:hostname] : ES_DEFAULT_HOST
+      @port     = opts.has_key?(:port) && opts[:port] \
+                ? opts[:port].to_i : ES_DEFAULT_PORT
+      @index    = opts.has_key?(:index) && opts[:index] \
+                ? opts[:index].strip : nil
+      @url      = make_url @scheme, @hostname, @port
+      @http     = Faraday::Connection.new url: @url || ES_DEFAULT_URL
+      @verbs    = {put:1, get:1, post:1, delete:1}
     end
 
-    def rad_index(req={})
+    def index(req = {})
       req[:verb] = :put
-      return self.rad_request req
+      self.rad_request req
     end
 
-    def rad_request(req={})
+    def rad_request(req = {})
       res = self.perform_request \
         get_verb_for_es_req(req),
         get_path_for_es_req(req),
         nil,
         get_body_for_es_req(req)
 
-      return res.body \
-        ? MultiJson.decode( res.body, symbolize_keys: true ) : nil
+      res.body ? MultiJson.decode(res.body, symbolize_keys: true) : nil
     end
 
     def perform_request(method, path, params, body)
-      @oFaraday.run_request \
+      @http.run_request \
         method.downcase.to_sym,
         path,
         body,
@@ -74,42 +78,42 @@ module  Elastirad
 
     private
 
-    def make_url(sProtocol='http', sHostname='localhost', iPort=9200)
-      if sHostname.nil?
-        sHostname = 'localhost'
-      elsif sHostname.is_a?(String)
-        sHostname.strip!
-        if sHostname.length < 1
-          sHostname = 'localhost'
+    def make_url(scheme = ES_DEFAULT_SCHEME, hostname = ES_DEFAULT_PORT, port = ES_DEFAULT_PORT)
+      if hostname.nil?
+        hostname = 'localhost'
+      elsif hostname.is_a?(String)
+        hostname.strip!
+        if hostname.length < 1
+          hostname = 'localhost'
         end
       else
         raise ArgumentError, 'E_HOSTNAME_IS_NOT_A_STRING'
       end
-      if iPort.nil?
-        iPort = 9200
-      elsif iPort.is_a?(String) && iPort =~ /^[0-9]+$/
-        iPort = iPort.to_i
-      elsif ! iPort.kind_of?(Integer)
+      if port.nil?
+        port = 9200
+      elsif port.is_a?(String) && port =~ /^[0-9]+$/
+        port = port.to_i
+      elsif ! port.kind_of?(Integer)
         raise ArgumentError, 'E_PORT_IS_NOT_AN_INTEGER'
       end
-      sBaseUrl   = "#{sProtocol}://#{sHostname}"
-      sBaseUrl.sub!(/\/+\s*$/,'')
-      sBaseUrl  += ':' + iPort.to_s if iPort != 80
-      return sBaseUrl
+      url = "#{scheme}://#{hostname}"
+      url.sub!(/\/+\s*$/,'')
+      url += ':' + port.to_s if port != 80
+      return url
     end
 
-    def get_verb_for_es_req(dEsReq={})
-      sVerb = dEsReq.has_key?(:verb) ? dEsReq[:verb] : :get
-      yVerb = sVerb.downcase.to_sym
-      unless @dVerbs.has_key?( yVerb )
+    def get_verb_for_es_req(es_req = {})
+      verb = es_req.has_key?(:verb) ? es_req[:verb] : :get
+      verb = verb.downcase.to_sym
+      unless @verbs.has_key?( verb )
         raise ArgumentError, 'E_BAD_VERB'
       end
-      return yVerb
+      return verb
     end
 
     def get_path_for_es_req(dEsReq={})
       aPath     = []
-      bHasIndex = false
+      has_index = false
 
       if dEsReq.has_key?(:path)
         if dEsReq[:path].is_a?(Array)
@@ -120,7 +124,7 @@ module  Elastirad
       else
         if dEsReq.has_key?(:index) && dEsReq[:index].is_a?(String)
           aPath.push(dEsReq[:index])
-          bHasIndex = true
+          has_index = true
         end
         if dEsReq.has_key?(:type) && dEsReq[:type].is_a?(String)
           aPath.push(dEsReq[:type])
@@ -129,29 +133,27 @@ module  Elastirad
           aPath.push(dEsReq[:id])
         end
       end
-      sPath = aPath.join('/')
-      sPath.strip!
-      sPath.gsub!(/\/+/,'/')
-      if (sPath.index('/')!=0 || !bHasIndex) && ( @sIndex.is_a?(String) && @sIndex.length>0 )
-        sPath = "#{@sIndex}/#{sPath}"
+      path = aPath.join('/').strip.gsub(/\/+/,'/')
+      if (path.index('/')!=0 || !has_index) && ( @index.is_a?(String) && @index.length>0 )
+        path = "#{@index}/#{path}"
       end
-      return sPath
+      return path
     end
 
-    def get_body_for_es_req(dEsReq={})
+    def get_body_for_es_req(es_req = {})
       json = nil
-      if dEsReq.has_key?(:body)
-        if dEsReq[:body].is_a?(Hash)
-          json = MultiJson.encode(dEsReq[:body])
-        elsif dEsReq[:body].is_a?(String) && dEsReq[:body].length > 0
-          json = dEsReq[:body]
+      if es_req.has_key?(:body)
+        if es_req[:body].is_a?(Hash)
+          json = MultiJson.encode(es_req[:body])
+        elsif es_req[:body].is_a?(String) && es_req[:body].length > 0
+          json = es_req[:body]
         end
         json = nil if json == '{}' || json.length < 1
       end
       return json
     end
 
-    alias_method :index, :rad_index
+    alias_method :rad_index, :index
     alias_method :request, :rad_request
     alias_method :request_all, :rad_request_all
   end

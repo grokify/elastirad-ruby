@@ -1,4 +1,4 @@
 module Elastirad
-  VERSION = '0.0.3'
+  VERSION = '0.1.0'
   autoload :Client, 'elastirad/client'
 end

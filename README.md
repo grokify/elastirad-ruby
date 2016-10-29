@@ -46,7 +46,7 @@ rad = Elastirad::Client.new
 # for greater flexibility when switching between deployments, e.g.
 # dev, staging, production, etc.
 
-rad = Elastirad::Client.new( \
+rad = Elastirad::Client.new(
   protocol: 'https',
   hostname: 'localhost',
   port:     9200,
@@ -89,7 +89,7 @@ result_hash = rad.rad_request({ \
 
 # :put verb can automatically be added using #rad_index method
 
-result_has = rad.rad_index({ \
+result_hash = rad.index({ \
   path: ['article', 1 ],
   body: article
 })
@@ -136,7 +136,7 @@ Elasticsearch::API for Ruby
 
 ## License
 
-Elastirad is available under an MIT-style license. See [LICENSE.txt](LICENSE.txt) for details.
+Elastirad is available under an MIT-style license. See [LICENSE.md](LICENSE.md) for details.
 
 Elastirad &copy; 2014-2016 by John Wang
 
