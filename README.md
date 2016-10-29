@@ -40,33 +40,33 @@ rad = Elastirad::Client.new
 # dev, staging, production, etc.
 
 rad = Elastirad::Client.new(
-  scheme:   'https',
-  hostname: 'localhost',
-  port:     9200,
+  scheme:   'https',      # defaults to 'http'
+  hostname: 'localhost',  # defaults to 'localhost'
+  port:     9200,         # defaults to 9200
   index:    'articles'
 )
 
 # path can be a simple string. Leading slash will over ride default :index
 
-result_hash = rad.rad_request path: '/articles/_count'
+result_hash = rad.request path: '/articles/_count'
 
 # path can also be an array
 
-result_hash = rad.rad_request path: ['/articles/article', 1 ]
+result_hash = rad.request path: ['/articles/article', 1 ]
 
 # default index can be used without leading slash
 
-result_hash = rad.rad_request path: ['article', 1 ]
+result_hash = rad.request path: ['article', 1 ]
 
 # retreive all responses for :get requests only
 
-result_hash = rad.rad_request_all path: 'article/_search'
+result_hash = rad.request_all path: 'article/_search'
 
 # optional :verb can be used for non-GET requests, :get is used by default
 
 article = { title: 'Hello World', by: 'John Doe' }
 
-result_hash = rad.rad_request(
+result_hash = rad.request(
   verb: 'put',
   path: ['article', 1 ],
   body: article
@@ -74,7 +74,7 @@ result_hash = rad.rad_request(
 
 # :body can be a hash or JSON string
 
-result_hash = rad.rad_request(
+result_hash = rad.request(
   verb: 'put',
   path: ['article', 1 ],
   body: JSON.dump( article )
