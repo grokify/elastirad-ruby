@@ -7,10 +7,10 @@ Gem::Specification.new do |s|
   s.name        = lib
   s.version     = version
   s.date        = '2016-10-29'
-  s.summary     = 'Elastirad - a RAD Elasticsearch client supporting minimal reading of documentation'
-  s.description = 'A RAD (Rapid Application Development) Elasticsearch client'
+  s.summary     = 'Elastirad - A Ruby SDK Wrapper for Elasticsearch using the online cURL documentation'
+  s.description = 'A Ruby SDK Wrapper for Elasticsearch that provides and interface to use the online cURL documentation'
   s.authors     = ['John Wang']
-  s.email       = 'john@johnwang.com'
+  s.email       = 'johncwang@gmail.com'
   s.files       = [
     'CHANGELOG.md',
     'LICENSE.md',
