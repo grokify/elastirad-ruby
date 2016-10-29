@@ -35,13 +35,12 @@ module  Elastirad
       res = self.perform_request \
         get_verb_for_es_req(req),
         get_path_for_es_req(req),
-        nil,
         get_body_for_es_req(req)
 
       res.body ? MultiJson.decode(res.body, symbolize_keys: true) : nil
     end
 
-    def perform_request(method, path, params, body)
+    def perform_request(method, path, body)
       @http.run_request \
         method.downcase.to_sym,
         path,
