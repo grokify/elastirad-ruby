@@ -49,26 +49,26 @@ module  Elastirad
         {'Content-Type' => 'application/json'}
     end
 
-    def rad_request_all(dEsReq={})
-      if dEsReq.has_key?(:body)
-        if dEsReq[:body].is_a?(String)
-          dEsReqBody = dEsReq[:body] \
+    def rad_request_all(es_req = {})
+      if es_req.has_key? :body
+        if es_req[:body].is_a? String
+          dEsReqBody = es_req[:body] \
             ? MultiJson.decode( dEsResBody, symbolize_keys: true ) : {}
-          dEsReq[:body] = dEsReqBody
+          es_req[:body] = dEsReqBody
         end
       else
-        dEsReq[:body] = {}
+        es_req[:body] = {}
       end
-      dEsReq[:body][:from] = 0
-      dEsRes1 = self.rad_request( dEsReq )
+      es_req[:body][:from] = 0
+      dEsRes1 = self.rad_request es_req
       dEsRes  = dEsRes1
-      if !dEsReq.has_key?(:verb) || dEsReq[:verb] == :get || dEsReq[:verb].downcase == 'get'
+      if !es_req.has_key?(:verb) || es_req[:verb] == :get || es_req[:verb].downcase == 'get'
         if dEsRes1.has_key?(:hits) && dEsRes1[:hits].has_key?(:total)
           iHitsTotal = dEsRes1[:hits][:total].to_i
           iHitsSize  = dEsRes1[:hits][:hits].length.to_i
           if iHitsTotal > iHitsSize
-            dEsReq[:body][:size] = iHitsTotal
-            dEsRes2  = self.rad_request( dEsReq )
+            es_req[:body][:size] = iHitsTotal
+            dEsRes2  = self.rad_request es_req
             dEsRes   = dEsRes2
           end
         end
