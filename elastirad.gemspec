@@ -22,9 +22,12 @@ Gem::Specification.new do |s|
   ]
   s.homepage    = 'http://johnwang.com/'
   s.license     = 'MIT'
+  s.required_ruby_version = '>= 2.0.0'
+
   s.add_dependency 'elasticsearch', '~> 5.0', '>= 5.0.0'
   s.add_dependency 'faraday', '~> 0.9', '>= 0.9'
   s.add_dependency 'multi_json', '~> 1.10', '>= 1.10.1'
+
   s.add_development_dependency 'coveralls', '~> 0'
   s.add_development_dependency 'rake', '~> 11'
   s.add_development_dependency 'simplecov', '~> 0'
