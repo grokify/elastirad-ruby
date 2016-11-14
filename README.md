@@ -14,7 +14,7 @@ Elastirad: A Ruby SDK Wrapper for Elasticsearch
 
 Elastirad is a simple wrapper for Elasticsearch's `Elasticsearch::API` that makes requests using Elasticsearch's online cURL-based documentation without needing to understand the syntax of the [Elasticsearch Ruby SDK](https://github.com/elastic/elasticsearch-ruby).
 
-`Elastirad::Client` embeds the `Elasticsearch::API` and thus supports `Elasticsearch::API` methods.
+`Elastirad::Client` includes `Elasticsearch::API` and thus supports `Elasticsearch::API` methods.
 
 Benefits include:
 
