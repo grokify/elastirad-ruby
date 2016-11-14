@@ -19,7 +19,7 @@ Elastirad is a simple wrapper for Elasticsearch's `Elasticsearch::API` that make
 Benefits include:
 
 * Direct use of documentation URLs, e.g. `_search`
-* URI search, e.g. `tweet/_search?q=q=user:kimchy`
+* URI search, e.g. `tweet/_search?q=user:kimchy`
 
 ## Installation
 
