@@ -1,7 +1,8 @@
 CHANGELOG
 ---------
-- **2016-10-29**: 0.1.0
-  - Add Travis CI, Coveralls, Gemnasium, Code Climate, Scrutinizer shields
+- **2016-11-14**: 0.1.0
+  - Add `request_raw` method
+  - Add Travis CI, Coveralls, Gemnasium, Code Climate, Scrutinizer support
   - Improve static analysis ratings
 - **2014-03-24**: 0.0.3
   - Add `Elastirad::Client::rad_request_all()` method
