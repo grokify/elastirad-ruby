@@ -26,17 +26,20 @@ module  Elastirad
       @verbs    = {put:1, get:1, post:1, delete:1}
     end
 
-    def index(req = {})
+    def rad_index(req = {})
       req[:verb] = :put
       self.request req
     end
 
-    def request(req = {})
-      res = self.perform_request \
+    def request_raw(req = {})
+      self.perform_request \
         get_verb_for_es_req(req),
         get_path_for_es_req(req),
         get_body_for_es_req(req)
+    end
 
+    def request(req = {})
+      res = request_raw req
       res.body ? MultiJson.decode(res.body, symbolize_keys: true) : nil
     end
 
@@ -123,7 +126,6 @@ module  Elastirad
         ? nil : json
     end
 
-    alias_method :rad_index, :index
     alias_method :rad_request, :request
     alias_method :rad_request_all, :request_all
   end

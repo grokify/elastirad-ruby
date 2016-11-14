@@ -81,7 +81,7 @@ result_hash = rad.request(
 
 # :put verb can automatically be added using #rad_index method
 
-result_hash = rad.index(
+result_hash = rad.rad_index(
   path: ['article', 1 ],
   body: article
 )
