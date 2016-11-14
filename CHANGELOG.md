@@ -1,17 +1,17 @@
 CHANGELOG
 ---------
-- **2016-11-14**: 0.1.0
+- **0.1.0** - 2016-11-14
   - Add `request_raw` method
   - Add Travis CI, Coveralls, Gemnasium, Code Climate, Scrutinizer support
   - Improve static analysis ratings
-- **2014-03-24**: 0.0.3
+- **0.0.3** - 2014-03-24
   - Add `Elastirad::Client::rad_request_all()` method
   - Expose `Elastirad::Client::sIndex` as rw accessor
-- **2014-03-15**: 0.0.2
+- **0.0.2** - 2014-03-15
   - Add documentation of `Elasticsearch::API` mixin functionality
   - Add `CHANGELOG.md` excerpt to `README.md`
   - Fix bug in `#rad_index`
   - Fix bug for YARD `README.md` formatting
-- **2014-03-14**: 0.0.1
+- **0.0.1** - 2014-03-14
   - Initial release
   - Custom `Elasticsearch::API` mixin client
