@@ -51,26 +51,20 @@ rad = Elastirad::Client.new(
 )
 
 # path can be a simple string. Leading slash will over ride default :index
-
 result_hash = rad.request path: '/twitter/_count'
 
 # path can also be an array
-
 result_hash = rad.request path: ['/twitter/tweet', 1 ]
 
 # default index can be used without leading slash
-
 result_hash = rad.request path: ['tweet', 1 ]
 
 # retreive all responses for :get requests only
-
 result_hash = rad.request_all path: 'tweet/_search'
 
 # optional :verb can be used for non-GET requests, :get is used by default
 
-
 # :body can be a hash or JSON string
-
 tweet = { user: 'kimchy', message: 'trying out Elasticsearch' }
 
 result_hash = rad.request(
@@ -86,13 +80,11 @@ result_hash = rad.request(
 )
 
 # Can be used with ES URI Search
-
 result_hash = rad.request(
   path: 'tweet/_search?q=user:kimchy'
 )
 
 # :put verb can automatically be added using #rad_index method
-
 result_hash = rad.rad_index(
   path: ['tweet', 1 ],
   body: tweet
@@ -104,7 +96,6 @@ mash = Hashie::Mash.new result_hash
 puts mash.hits.total
 
 # Supports Elasticsearch::API methods
-
 p rad.cluster.health
 # --> GET _cluster/health {}
 # => "{"cluster_name":"elasticsearch" ... }"
