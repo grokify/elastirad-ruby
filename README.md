@@ -16,6 +16,11 @@ Elastirad is a simple wrapper for Elasticsearch's `Elasticsearch::API` that make
 
 `Elastirad::Client` embeds the `Elasticsearch::API` and thus supports `Elasticsearch::API` methods.
 
+Benefits include:
+
+* Direct use of documentation URLs, e.g. `_search`
+* URI search, e.g. `tweet/_search?q=q=user:kimchy`
+
 ## Installation
 
 Download and install elastirad with the following:
@@ -42,49 +47,61 @@ rad = Elastirad::Client.new(
   scheme:   'https',      # defaults to 'http'
   hostname: 'localhost',  # defaults to 'localhost'
   port:     9200,         # defaults to 9200
-  index:    'articles'
+  index:    'twitter'
 )
 
 # path can be a simple string. Leading slash will over ride default :index
 
-result_hash = rad.request path: '/articles/_count'
+result_hash = rad.request path: '/twitter/_count'
 
 # path can also be an array
 
-result_hash = rad.request path: ['/articles/article', 1 ]
+result_hash = rad.request path: ['/twitter/tweet', 1 ]
 
 # default index can be used without leading slash
 
-result_hash = rad.request path: ['article', 1 ]
+result_hash = rad.request path: ['tweet', 1 ]
 
 # retreive all responses for :get requests only
 
-result_hash = rad.request_all path: 'article/_search'
+result_hash = rad.request_all path: 'tweet/_search'
 
 # optional :verb can be used for non-GET requests, :get is used by default
 
-article = { title: 'Hello World', by: 'John Doe' }
-
-result_hash = rad.request(
-  verb: 'put',
-  path: ['article', 1 ],
-  body: article
-)
 
 # :body can be a hash or JSON string
 
+tweet = { user: 'kimchy', message: 'trying out Elasticsearch' }
+
 result_hash = rad.request(
   verb: 'put',
-  path: ['article', 1 ],
-  body: JSON.dump( article )
+  path: ['tweet', 1 ],
+  body: tweet
+)
+
+result_hash = rad.request(
+  verb: 'put',
+  path: ['tweet', 1 ],
+  body: JSON.dump( tweet )
+)
+
+# Can be used with ES URI Search
+
+result_hash = rad.request(
+  path: 'tweet/_search?q=user:kimchy'
 )
 
 # :put verb can automatically be added using #rad_index method
 
 result_hash = rad.rad_index(
-  path: ['article', 1 ],
-  body: article
+  path: ['tweet', 1 ],
+  body: tweet
 )
+
+# Use with Hashie
+require 'hashie'
+mash = Hashie::Mash.new result_hash
+puts mash.hits.total
 
 # Supports Elasticsearch::API methods
 
